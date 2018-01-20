@@ -9,10 +9,6 @@ import javax.inject.Inject
 import javax.inject.Provider
 import javax.inject.Qualifier
 
-/**
- * @author satosh.dhanymaraju
- */
-
 @Qualifier
 annotation class isbn
 
@@ -31,7 +27,9 @@ data class User @Inject constructor(@username val name: String, val age: Int, va
 @Module
 class UsrModule {
     private val r = Random()
-    private val names = arrayListOf("Albus", "Severus", "Potter")
+    private val names = arrayListOf("Albus", "Severus", "Potter", "YouKnowWho", "Granger")
+    private val bookNames = arrayListOf("History of Magic", "Defence Against the Dark Arts",
+            "Herbology", "Flying", "Muggle Studies", "Care of Magical Creatures", "Potions")
 
     @Provides
     @isbn
@@ -43,7 +41,7 @@ class UsrModule {
 
     @Provides
     @bookname
-    fun prvdBookname() = "book-${System.currentTimeMillis()}"
+    fun prvdBookname() = bookNames[r.nextInt(bookNames.size)]
 
     @Provides
     fun prvdI() = 42
@@ -57,6 +55,9 @@ class UsrModule {
                 .map { bookprv.get() }
                 .toList()
     }
+
+    @Provides
+    fun prvdUserApi(mockUserApi: MockUserApi): UserApi = mockUserApi
 
 }
 
